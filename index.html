@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Limpieza Automatizada de Cuentas - Firebase</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Encabezado -->
+  <header class="header">
+    <div class="header-container">
+      <div class="logo-area">
+        <span class="logo-icon">🔥</span>
+        <div>
+          <h1 class="logo-title">Firebase CleanUp</h1>
+          <p class="logo-subtitle">Ficha 03/12 · Desafío 10: Limpieza Automatizada · <strong>María</strong></p>
+        </div>
+      </div>
+      <div class="status-badge" id="authBadge">
+        <span class="status-dot"></span>
+        <span id="authStatusText">Sin sesión</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenedor Principal -->
+  <main class="main-container">
+
+    <!-- 1. Selección de Usuario (Sección C de la Ficha) -->
+    <section class="card auth-card">
+      <div class="card-header">
+        <h2 class="card-title">👤 1. Autenticación y Usuarios de Prueba</h2>
+        <span class="badge badge-warning">Demostración</span>
+      </div>
+      <p class="card-desc">
+        Inicia sesión con María (para eliminarla) o con Carlos (para comprobar que sus datos quedan 100% intactos):
+      </p>
+
+      <div class="user-switch-grid">
+        <button class="btn btn-user" id="btnLoginMaria">
+          <div class="user-avatar user-avatar-maria">M</div>
+          <div class="user-info">
+            <span class="user-name">María Chamorro (Sujeto)</span>
+            <span class="user-email">maria@demo.com</span>
+          </div>
+          <span class="badge badge-danger">Se eliminará</span>
+        </button>
+
+        <button class="btn btn-user" id="btnLoginCarlos">
+          <div class="user-avatar user-avatar-carlos">C</div>
+          <div class="user-info">
+            <span class="user-name">Carlos Mendoza (Control)</span>
+            <span class="user-email">carlos@demo.com</span>
+          </div>
+          <span class="badge badge-success">Quedará intacto</span>
+        </button>
+      </div>
+
+      <div class="current-user-box" id="currentUserBox" style="display: none;">
+        <div class="current-user-details">
+          <p>Sesión activa: <strong id="currentUserName">-</strong> (<span id="currentUserEmail">-</span>)</p>
+          <p class="uid-text">UID en Auth: <code id="currentUid">-</code></p>
+        </div>
+        <button class="btn btn-outline" id="btnLogout">Cerrar Sesión</button>
+      </div>
+    </section>
+
+    <!-- 2. Visualizador de Documentos en Firestore -->
+    <section class="card data-card">
+      <div class="card-header">
+        <h2 class="card-title">📂 2. Documentos en Firestore</h2>
+        <span class="badge badge-primary" id="docCountBadge">0 Documentos</span>
+      </div>
+      <p class="card-desc">Documentos almacenados en la base de datos pertenecientes al usuario actual:</p>
+
+      <div class="actions-bar">
+        <button class="btn btn-primary" id="btnAddTestData">
+          ➕ Crear Documento de Prueba
+        </button>
+        <button class="btn btn-secondary" id="btnRefreshDocs">
+          🔄 Refrescar Firestore
+        </button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Colección</th>
+              <th>Doc ID</th>
+              <th>Propietario (userId)</th>
+              <th>Título / Contenido</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr>
+              <td colspan="5" class="empty-state">
+                Inicia sesión con María o Carlos para visualizar sus documentos.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. Botón de Eliminación (Trigger Backend) -->
+    <section class="card delete-card">
+      <div class="card-header">
+        <h2 class="card-title text-danger">⚠️ 3. Disparar Limpieza Automatizada</h2>
+        <span class="badge badge-danger">Trigger onDelete</span>
+      </div>
+      <p class="card-desc">
+        Al hacer clic en este botón, el cliente web ejecuta <code class="code-inline">deleteUser(auth.currentUser)</code>.
+        La Cloud Function en el backend capturará el evento y purgará todos los documentos del usuario en lotes (batches de 500 ops), 
+        <strong>garantizando que los datos de Carlos permanezcan intactos</strong>.
+      </p>
+
+      <div class="delete-action-box">
+        <button class="btn btn-danger btn-lg" id="btnDeleteAccount">
+          🗑️ Eliminar mi Cuenta Permanentemente
+        </button>
+      </div>
+
+      <div class="alert-box" id="alertBox" style="display: none;">
+        <div class="alert-icon" id="alertIcon">ℹ️</div>
+        <div class="alert-content">
+          <h4 id="alertTitle">Notificación</h4>
+          <p id="alertMessage">Mensaje de estado...</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Proyecto Ficha 03/12 · Desafío 10: Limpieza automatizada de cuentas · Estudiante: <strong>María</strong></p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
